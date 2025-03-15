@@ -13,9 +13,8 @@ class TestStringMethods(unittest.TestCase):
             obj_retornado = r.json()
         except:
             self.fail("Não foi retornado um json")
-        
-        
-        self.assertEqual(type(obj_retornado),type([]))
+            
+        self.assertIsInstance(obj_retornado, list)
    
     def test_001_adicionar_aluno(self):
         r = requests.post('http://localhost:5000/aluno', json={'nome': 'Ronaldo', 'id':1})
@@ -40,7 +39,7 @@ class TestStringMethods(unittest.TestCase):
     def test_002_request_id_aluno(self):
         r = requests.post('http://localhost:5000/aluno', json={'nome':"noemi", 'id':23})
         
-        resposta = requests.get('http://localhost:5000/aluno')
+        resposta = requests.get('http://localhost:5000/aluno/23')
         dict_retornado = resposta.json()
         self.assertEqual(type(dict_retornado), dict)
         self.assertIn('nome', dict_retornado)
@@ -77,7 +76,7 @@ class TestStringMethods(unittest.TestCase):
     def test_004_edita_aluno(self):
         requests.post('http://localhost:5000/aluno',json={'nome':'Marquinhos','id':14})
         r_lista_antes = requests.get('http://localhost:5000/aluno/14')
-        self.assertEqual(r_lista_antes.json()['nome'],'lucas')
+        self.assertEqual(r_lista_antes.json()['nome'],'Marquinhos')
         
         requests.put('http://localhost:5000/aluno/14', json={'nome':'Marcos Almeida'})
         
