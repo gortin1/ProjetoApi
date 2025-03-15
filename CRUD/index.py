@@ -80,7 +80,7 @@ def createAluno():
     try:
         dados = request.json
         if not dados:
-            return jsonify('erro':'ocorreu um erro dados invalidos ou ausentes') ,400
+            return jsonify({'erro':'ocorreu um erro dados invalidos ou ausentes'}) ,400
         aluno = dicionario["alunos"]
         aluno.append(dados) 
         return jsonify(dados)

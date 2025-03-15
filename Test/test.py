@@ -10,7 +10,7 @@ class TestStringMethods(unittest.TestCase):
             self.fail("O link está com erro/Não há alunos no server")
         
         try:
-            obj_retornado = r.json
+            obj_retornado = r.json()
         except:
             self.fail("Não foi retornado um json")
         
@@ -47,35 +47,40 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(dict_retornado['nome'],'noemi')
    
     def test_003_deletar_aluno(self):
-        r_lista = requests.get('http://localhost:5000/alunos')
+        requests.post('http://localhost:5000/aluno', json={'nome':'Jorginho', 'id':23})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Mariazinha', 'id':24})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Luan', 'id':25})
+        
+        requests.delete('http://localhost:5000/aluno/24')
+        r_lista = requests.get('http://localhost:5000/aluno')
         lista_retornada = r_lista.json()
-    
-        self.assertEqual(len(lista_retornada),3)
-        
-        requests.delete('http://localhost:5000/alunos/28')
-        
-        r_lista2 = requests.get('http://localhost:5000/alunos')
-        lista_retornada2 = r_lista2.json()
-        self.assertEqual(len(lista_retornada2),2)
-        acheiMarta = False
-        acheiCicero = False
+        adicao1 = False
+        adicao2 = False
         for aluno in lista_retornada:
-            if aluno['nome'] == 'marta':
-                acheiMarta=True
-            if aluno['nome'] == 'cicero':
-                acheiCicero=True
-        if not acheiMarta or not acheiCicero:
-            self.fail("voce parece ter deletado o aluno errado!")
+            if aluno['nome'] == 'Jorginho':
+                adicao1 = True
+            if aluno['nome'] == 'Luan':
+                adicao2 = True
+        if not adicao1 or not adicao2:
+            self.fail("Deletou o aluno errado")
 
-        requests.delete('http://localhost:5000/alunos/27')
+        requests.delete('http://localhost:5000/aluno/25')
 
-        r_lista3 = requests.get('http://localhost:5000/alunos')
-        lista_retornada3 = r_lista3.json()
-        
-        self.assertEqual(len(lista_retornada3),1) 
+        r_lista2 = requests.get('http://localhost:5000/aluno')
+        lista_retornada2 = r_lista2.json()
 
-        if lista_retornada3[0]['nome'] == 'cicero':
+        if lista_retornada2[0]['nome'] == 'Jorginho':
             pass
         else:
-            self.fail("voce parece ter deletado o aluno errado!")
+            self.fail("Aluno errado deletado")
 
+    def test_004_edita_aluno(self):
+        requests.post('http://localhost:5000/aluno',json={'nome':'Marquinhos','id':14})
+        r_lista_antes = requests.get('http://localhost:5000/aluno/14')
+        self.assertEqual(r_lista_antes.json()['nome'],'lucas')
+        
+        requests.put('http://localhost:5000/aluno/14', json={'nome':'Marcos Almeida'})
+        
+        r_lista_depois = requests.get('http://localhost:5000/aluno/14')
+        self.assertEqual(r_lista_depois.json()['nome'],'Marcos Almeida')
+        self.assertEqual(r_lista_depois.json()['id'],14)
