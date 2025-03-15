@@ -77,10 +77,15 @@ def getAluno(id):
         
 @app.route('/aluno', methods = ['POST'])
 def createAluno():
-    dados = request.json
-    aluno = dicionario["alunos"]
-    aluno.append(dados) 
-    return jsonify(dados)
+    try:
+        dados = request.json
+        if not dados:
+            return jsonify('erro':'ocorreu um erro dados invalidos ou ausentes') ,400
+        aluno = dicionario["alunos"]
+        aluno.append(dados) 
+        return jsonify(dados)
+    except Exception as e:
+        return jsonify({'erro':f'Ocorreu um erro {e}'}), 500
 
 @app.route('/aluno/<int:id>', methods=['PUT'])
 def updateAluno(id):
@@ -120,11 +125,16 @@ def getProfessor(id):
         
 @app.route('/professor', methods = ['POST'])
 def createProfessor():
-    dados = request.json
-    professores = dicionario["professores"]
-    professores.append(dados)
-    return jsonify(dados)
-
+    try:
+        dados = request.json
+        if not dados:
+            return jsonify({'erro':'dados invalidos ou ausentes'}), 400
+        professores = dicionario["professores"]
+        professores.append(dados)
+        return jsonify(dados)
+    except Exception as e:
+        return jsonify({'erro': f'ocorreu um erro: {str(e)}'}), 500
+        
 @app.route('/professor/<int:id>', methods = ['PUT'])
 def updateProfessor(id):
     professores = dicionario["professores"]
@@ -136,6 +146,7 @@ def updateProfessor(id):
             professor['materia'] = dados['materia']
             professor['observacoes'] = dados['observacoes']
             return jsonify(dados)
+        
         
 @app.route('/professor/<int:id>', methods=['DELETE'])
 def deleteProfessor(id):
@@ -160,10 +171,16 @@ def getTurma(id):
         
 @app.route('/turma', methods=['POST'] )
 def createTurma():
-    dados = request.json
-    turma = dicionario["turmas"]
-    turma.append(dados)
-    return jsonify(dados)
+    try: 
+        dados = request.json
+        if not dados:
+            return jsonify({'erro':'dados invalidos ou ausentes'}), 400
+        
+        turma = dicionario["turmas"]
+        turma.append(dados)
+        return jsonify(dados)
+    except Exception as e:
+        return jsonify({'erro': f'ocorreu um erro: {str(e)}'}), 500
 
 @app.route('/turma/<int:id>', methods=['PUT'])
 def updateTurma(id):
