@@ -18,8 +18,8 @@ class TestStringMethods(unittest.TestCase):
         self.assertIsInstance(obj_retornado, list)
    
     def test_001_adicionar_aluno(self):
-        requests.post('http://localhost:5000/aluno', json={'nome': 'Ronaldo', 'id':1})
-        requests.post('http://localhost:5000/aluno', json={'nome': 'Marcola', 'id':2})
+        requests.post('http://localhost:5000/aluno', json={'nome': 'Ronaldo', 'id':3, 'turma_id' : 2})
+        requests.post('http://localhost:5000/aluno', json={'nome': 'Marcola', 'id':4, 'turma_id' : 1})
         
         r_lista =  requests.get('http://localhost:5000/aluno')
         lista_retornada = r_lista.json()
@@ -33,10 +33,10 @@ class TestStringMethods(unittest.TestCase):
                 adicao2 = True
             
         if not adicao1 or not adicao2: 
-                self.fail('Aluno não apareceu na lista de alunos')
+            self.fail('Aluno não apareceu na lista de alunos')
 
     def test_002_request_id_aluno(self):
-        r = requests.post('http://localhost:5000/aluno', json={'nome':"noemi", 'id':21})
+        r = requests.post('http://localhost:5000/aluno', json={'nome':"noemi", 'id':21, 'turma_id' : 2})
         
         resposta = requests.get('http://localhost:5000/aluno/21')
         dict_retornado = resposta.json()
@@ -45,9 +45,9 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(dict_retornado['nome'],'noemi')
    
     def test_003_deletar_aluno(self):
-        requests.post('http://localhost:5000/aluno', json={'nome':'Jorginho', 'id':23})
-        requests.post('http://localhost:5000/aluno', json={'nome':'Mariazinha', 'id':24})
-        requests.post('http://localhost:5000/aluno', json={'nome':'Luan', 'id':25})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Jorginho', 'id':23, 'turma_id' : 2})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Mariazinha', 'id':24, 'turma_id' : 2})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Luan', 'id':25, 'turma_id' : 2})
         
         requests.delete('http://localhost:5000/aluno/24')
         r_lista = requests.get('http://localhost:5000/aluno')
@@ -74,7 +74,7 @@ class TestStringMethods(unittest.TestCase):
              self.fail("Aluno errado deletado")
 
     def test_004_edita_aluno(self):
-        requests.post('http://localhost:5000/aluno',json={'nome':'Thiago','id': 18})
+        requests.post('http://localhost:5000/aluno',json={'nome':'Thiago','id': 18, 'turma_id' : 2})
         r_lista_antes = requests.get('http://localhost:5000/aluno/18')
         self.assertEqual(r_lista_antes.json()['nome'],'Thiago')
         
@@ -181,7 +181,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertIsInstance(obj_retornado, list)
         
     def test_011_adicionar_turma(self):
-        r= requests.post("http://localhost:5000/turma", json={'descricao':'Turma 1', 'id':3})
+        r= requests.post("http://localhost:5000/turma", json={'descricao':'Turma 1', 'id':3, "professor_id": 1})
         r_lista = requests.get("http://localhost:5000/turma")
         retornada = r_lista.json()
         Turma = False
@@ -192,7 +192,7 @@ class TestStringMethods(unittest.TestCase):
             self.fail("A turma não foi adicionada corretamente")
             
     def test_012_turma_id(self):
-        r = requests.post("http://localhost:5000/turma", json={'descricao':'turma 2','id':4})
+        r = requests.post("http://localhost:5000/turma", json={'descricao':'turma 2','id': 4, "professor_id": 1})
         
         resposta = requests.get('http://localhost:5000/turma/4')
         dict_retornado = resposta.json()
@@ -201,9 +201,9 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(dict_retornado['descricao'],'turma 2')
         
     def test_013_remover_turma(self):
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma Ads', 'id':10})
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma bd', 'id':11})
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma ci', 'id':12})
+        requests.post('http://localhost:5000/turma', json={'descricao':'turma Ads', 'id':10, "professor_id": 1})
+        requests.post('http://localhost:5000/turma', json={'descricao':'turma bd', 'id':11, "professor_id": 1})
+        requests.post('http://localhost:5000/turma', json={'descricao':'turma ci', 'id':12, "professor_id": 1})
         
         requests.delete('http://localhost:5000/turma/10')
         
@@ -232,7 +232,7 @@ class TestStringMethods(unittest.TestCase):
             self.fail('Deletou a turma errada')
               
     def test_014_mudar_turma(self):
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma de portugues','id':14})
+        requests.post('http://localhost:5000/turma', json={'descricao':'turma de portugues','id':14, "professor_id": 1})
         r_lista_before = requests.get('http://localhost:5000/turma/14')
         self.assertEqual(r_lista_before.json()['descricao'],'turma de portugues')
         
