@@ -5,21 +5,21 @@ app = Flask("__name__")
 
 dicionario = {
     "professores": [
-        # {
-        #     "id": 1, 
-        #     "nome": "Gabriel", 
-        #     "idade": 20, 
-        #     "materia": "Portugues", 
-        #     "observacoes": "Aula de Segunda"
-        # },
+        {
+            "id": 1, 
+            "nome": "Gabriel", 
+            "idade": 20, 
+            "materia": "Portugues", 
+            "observacoes": "Aula de Segunda"
+        },
 
-        # {
-        #     "id": 2, 
-        #     "nome": "Nicolas", 
-        #     "idade": 22, 
-        #     "materia": "Portugues", 
-        #     "observacoes": "Aula de Terça"
-        # }
+        {
+            "id": 2, 
+            "nome": "Nicolas", 
+            "idade": 22, 
+            "materia": "Portugues", 
+            "observacoes": "Aula de Terça"
+        }
     ],
 
     "turmas": [
@@ -33,7 +33,7 @@ dicionario = {
         {
             "id" : 2,
             "descricao": "Turma 3B",
-            "professor_id" : 3,
+            "professor_id" : 2,
             "ativo" : True
         }
     ],
@@ -81,25 +81,18 @@ def createAluno():
         dados = request.json
         if not dados:
             return jsonify({'erro':'ocorreu um erro dados invalidos ou ausentes'}) ,400
-        alunos = dicionario["alunos"]
-        turmas = dicionario['turmas']
-    
-        for turma in turmas:
-                if turma['id'] == dados['turma_id']:
-                    alunos.append(dados) 
-                    return jsonify(dados)
-        return jsonify({'Erro': f'Ocorreu um erro: Turma não encontrada'}), 500
-    
+        aluno = dicionario["alunos"]
+        aluno.append(dados) 
+        return jsonify(dados)
     except Exception as e:
         return jsonify({'erro':f'Ocorreu um erro {e}'}), 500
 
 @app.route('/aluno/<int:id>', methods=['PUT'])
 def updateAluno(id):
     alunos = dicionario["alunos"]
-    print(alunos)
-    dados = request.json
     for aluno in alunos:
         if aluno['id'] == id:
+            dados = request.json
             aluno['nome'] = dados['nome']
             aluno['idade'] = dados['idade']
             aluno['turma_id'] = dados['turma_id']
@@ -108,33 +101,6 @@ def updateAluno(id):
             aluno['nota_segundo_semestre'] = dados['nota_segundo_semestre']
             aluno['media_final'] = dados['media_final']
             return jsonify(dados)
-        return jsonify({'Erro : ' f'Você precisa passar todos os parametros!'})
-    return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
-    
-@app.route('/aluno/<int:id>', methods=['PATCH'])    
-def PatchUpdateAluno(id):
-    alunos = dicionario['alunos']
-    dados = request.json
-    for aluno in alunos :
-        if aluno['id'] == id:
-            if dados['nome']:
-                aluno['nome'] = dados['nome']
-            if dados['idade'] :
-                aluno['idade'] = dados['idade']
-            if dados['turma_id']:
-                aluno['turma_id'] = dados['turma_id']
-            if dados['data_nascimento']:
-                aluno['data_nascimento'] = dados['data_nascimento']
-            if dados['nota_primeiro_semestre']:
-                aluno['nota_primeiro_semestre'] = dados['nota_primeiro_semestre']
-            if dados['nota_segundo_semestre']:
-                aluno['nota_segundo_semestre'] = dados['nota_segundo_semestre']
-            if dados['media_final']:
-                aluno['media_final'] = dados['media_final']   
-            return jsonify(dados)
-        return jsonify("Nenhum parametro foi alterado")
-    return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
-            
         
 @app.route('/aluno/<int:id>', methods=['DELETE'])
 def deleteAluno(id):
@@ -144,7 +110,6 @@ def deleteAluno(id):
             index = alunos.index(aluno)
             alunos.pop(index)
             return jsonify(aluno)
-    
      
 @app.route('/professor', methods = ['GET'])
 def getProfessores():
@@ -181,7 +146,7 @@ def updateProfessor(id):
             professor['materia'] = dados['materia']
             professor['observacoes'] = dados['observacoes']
             return jsonify(dados)
-                
+        
         
 @app.route('/professor/<int:id>', methods=['DELETE'])
 def deleteProfessor(id):
@@ -212,14 +177,10 @@ def createTurma():
             return jsonify({'erro':'dados invalidos ou ausentes'}), 400
         
         turma = dicionario["turmas"]
-        professores = dicionario["professores"]
-        for professor in professores:
-            if professor['id'] == dados['professor_id']:
-                turma.append(dados)
-                return jsonify(dados)
-        return jsonify({'Erro': f'Ocorreu um erro: Professor não encontrado'}), 500
+        turma.append(dados)
+        return jsonify(dados)
     except Exception as e:
-        return jsonify({'Erro': f'Ocorreu um erro: {str(e)}'}), 500
+        return jsonify({'erro': f'ocorreu um erro: {str(e)}'}), 500
 
 @app.route('/turma/<int:id>', methods=['PUT'])
 def updateTurma(id):
