@@ -264,6 +264,32 @@ def updateTurma(id):
             turma['professor_id'] = dados['professor_id']
             turma['ativo'] = dados['ativo']
             return jsonify(dados)
+        
+@app.route('/turma/<int:id>', methods=['PATCH'])
+def PatchUpdateTurma(id):
+    turmas = dicionario['turmas']
+    dados = request.json
+    atualizado = False
+    for turma in turmas:
+        if turma['id'] == id:
+            if dados.get('descricao') is not None:
+                turma['descricao'] = dados['descricao']
+                atualizado = True
+            if dados.get('professor_id') is not None:
+                turma['professor_id'] = dados['professor_id']
+                atualizado = True
+            if dados.get('ativo') is not None:
+                turma['ativo'] = dados['ativo']
+                atualizado = True
+                
+            if atualizado:
+                return jsonify(turma)
+            
+    if not atualizado:    
+        return jsonify({'Erro': f'Ocorreu um erro: Nenhum parametro foi alterado'})
+    
+    return jsonify({'Erro': f'Ocorreu um erro: Professor não encontrada'})
+                
 
 @app.route('/turma/<int:id>', methods=['DELETE'])
 def deleteTurma(id):
