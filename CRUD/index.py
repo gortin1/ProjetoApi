@@ -102,32 +102,45 @@ def updateAluno(id):
             aluno['nota_segundo_semestre'] = dados['nota_segundo_semestre']
             aluno['media_final'] = dados['media_final']
             return jsonify(dados)
-        return jsonify({'Erro': f'Ocorreu um erro: Todos os parametros devem ser alterados'})
+     
     return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
         
 @app.route('/aluno/<int:id>', methods=['PATCH'])    
 def PatchUpdateAluno(id):
     alunos = dicionario['alunos']
     dados = request.json
+    atualizado = False
     for aluno in alunos :
         if aluno['id'] == id:
-            if dados['nome']:
+            if dados.get('nome') is not None:
                 aluno['nome'] = dados['nome']
-            if dados['idade'] :
+                atualizado = True
+            if dados.get('idade') is not None:
                 aluno['idade'] = dados['idade']
-            if dados['turma_id']:
+                atualizado = True
+            if dados.get('turma_id') is not None:
                 aluno['turma_id'] = dados['turma_id']
-            if dados['data_nascimento']:
+                atualizado = True
+            if dados.get('data_nascimento') is not None:
                 aluno['data_nascimento'] = dados['data_nascimento']
-            if dados['nota_primeiro_semestre']:
+                atualizado = True
+            if dados.get('nota_primeiro_semestre') is not None:
                 aluno['nota_primeiro_semestre'] = dados['nota_primeiro_semestre']
-            if dados['nota_segundo_semestre']:
+                atualizado = True
+            if dados.get('nota_segundo_semestre') is not None:
                 aluno['nota_segundo_semestre'] = dados['nota_segundo_semestre']
-            if dados['media_final']:
-                aluno['media_final'] = dados['media_final']   
-            return jsonify(dados)
-        return jsonify("Nenhum parametro foi alterado")
-    return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
+                atualizado = True
+            if dados.get('media_final') is not None:
+                aluno['media_final'] = dados['media_final']
+                atualizado = True
+
+            if atualizado:
+                return jsonify(aluno)  
+
+    if not atualizado:
+        return jsonify({'Erro': "Ocorreu um erro: Nenhum parâmetro foi alterado"})
+
+    return jsonify({'Erro': "Ocorreu um erro: Aluno não encontrado"})
         
 @app.route('/aluno/<int:id>', methods=['DELETE'])
 def deleteAluno(id):
@@ -150,6 +163,7 @@ def getProfessor(id):
     for professor in professores:
         if professor['id'] == id:
             return jsonify(professor)
+    return jsonify({'Erro': f'Ocorreu um erro: Professor não encontrada'})
         
 @app.route('/professor', methods = ['POST'])
 def createProfessor():
@@ -175,6 +189,35 @@ def updateProfessor(id):
             professor['observacoes'] = dados['observacoes']
             return jsonify(dados)
         
+    return jsonify({'Erro': f'Ocorreu um erro: Professor não encontrada'})
+        
+@app.route('/professor/<int:id>', methods = ['PATCH'])
+def PatchUpdateProfessor(id):
+    professores = dicionario['professores']
+    dados = request.json
+    atualizado = False
+    for professor in professores:
+        if professor['id'] == id:
+            if dados.get('nome') is not None:
+                professor['nome'] = dados['nome']
+                atualizado = True
+            if dados.get('idade') is not None:
+                professor['idade'] = dados['idade']
+                atualizado = True
+            if dados.get('materia') is not None:
+                professor['materia'] = dados['materia']
+                atualizado = True
+            if dados.get('observacoes') is not None:
+                professor['observacoes'] = dados['observacoes']
+                atualizado = True
+            
+            if atualizado:
+                return jsonify(professor)
+        
+    if not atualizado:    
+        return jsonify({'Erro': f'Ocorreu um erro: Nenhum parametro foi alterado'})
+    
+    return jsonify({'Erro': f'Ocorreu um erro: Professor não encontrada'})
         
 @app.route('/professor/<int:id>', methods=['DELETE'])
 def deleteProfessor(id):
@@ -184,6 +227,7 @@ def deleteProfessor(id):
             index = professores.index(professor)
             professores.pop(index)
             return jsonify(professor)
+    return jsonify({'Erro': f'Ocorreu um erro: Professor não encontrada'})
         
 @app.route('/turma', methods=['GET'])
 def getTurmas():
