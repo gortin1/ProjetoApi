@@ -74,6 +74,7 @@ def getAluno(id):
     for aluno in alunos:
         if aluno['id'] == id:
             return jsonify(aluno)
+    return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
         
 @app.route('/aluno', methods = ['POST'])
 def createAluno():
@@ -101,6 +102,32 @@ def updateAluno(id):
             aluno['nota_segundo_semestre'] = dados['nota_segundo_semestre']
             aluno['media_final'] = dados['media_final']
             return jsonify(dados)
+        return jsonify({'Erro': f'Ocorreu um erro: Todos os parametros devem ser alterados'})
+    return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
+        
+@app.route('/aluno/<int:id>', methods=['PATCH'])    
+def PatchUpdateAluno(id):
+    alunos = dicionario['alunos']
+    dados = request.json
+    for aluno in alunos :
+        if aluno['id'] == id:
+            if dados['nome']:
+                aluno['nome'] = dados['nome']
+            if dados['idade'] :
+                aluno['idade'] = dados['idade']
+            if dados['turma_id']:
+                aluno['turma_id'] = dados['turma_id']
+            if dados['data_nascimento']:
+                aluno['data_nascimento'] = dados['data_nascimento']
+            if dados['nota_primeiro_semestre']:
+                aluno['nota_primeiro_semestre'] = dados['nota_primeiro_semestre']
+            if dados['nota_segundo_semestre']:
+                aluno['nota_segundo_semestre'] = dados['nota_segundo_semestre']
+            if dados['media_final']:
+                aluno['media_final'] = dados['media_final']   
+            return jsonify(dados)
+        return jsonify("Nenhum parametro foi alterado")
+    return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
         
 @app.route('/aluno/<int:id>', methods=['DELETE'])
 def deleteAluno(id):
@@ -110,6 +137,7 @@ def deleteAluno(id):
             index = alunos.index(aluno)
             alunos.pop(index)
             return jsonify(aluno)
+    return jsonify({'Erro': f'Ocorreu um erro: Aluno não encontrada'})
      
 @app.route('/professor', methods = ['GET'])
 def getProfessores():
