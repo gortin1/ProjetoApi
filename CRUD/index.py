@@ -39,16 +39,16 @@ dicionario = {
     ],
 
     "alunos": [
-        {
-            "id": 1, 
-            "nome": "Camila", 
-            "idade": 20, 
-            "turma_id": 1, 
-            "data_nascimento": date(2025,3,14),
-            "nota_primeiro_semestre": 10.0,
-            "nota_segundo_semestre": 9.0,
-            "media_final": 9.5
-        },
+        # {
+        #     "id": 1, 
+        #     "nome": "Camila", 
+        #     "idade": 20, 
+        #     "turma_id": 1, 
+        #     "data_nascimento": date(2025,3,14),
+        #     "nota_primeiro_semestre": 10.0,
+        #     "nota_segundo_semestre": 9.0,
+        #     "media_final": 9.5
+        # },
 
         {
             "id": 2, 
@@ -290,7 +290,7 @@ def PatchUpdateTurma(id):
     
     return jsonify({'Erro': f'Ocorreu um erro: Professor não encontrada'})
                 
-
+                
 @app.route('/turma/<int:id>', methods=['DELETE'])
 def deleteTurma(id):
     turmas = dicionario['turmas']
