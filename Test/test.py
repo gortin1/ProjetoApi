@@ -284,13 +284,13 @@ class TestStringMethods(unittest.TestCase):
         r_lista_before = requests.get('http://localhost:5000/turma/14')
         self.assertEqual(r_lista_before.json()['descricao'],'turma de portugues')
         
-        requests.put('http://localhost:5000/turma/14',json={'descricao':'turma de matematica', "professor_id": 1, "ativo" : True})
+        requests.put('http://localhost:5000/turma/14',json={'descricao':'turma de matematica', "professor_id": 1,"ativo" : True})
         r_lista_after = requests.get('http://localhost:5000/turma/14')
         self.assertEqual(r_lista_after.json()['descricao'],'turma de matematica')
         self.assertEqual(r_lista_after.json()['id'],14)
         
     def test_014_mudar_turma_path(self):
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma de java','id':64, "professor_id": 1})
+        requests.post('http://localhost:5000/turma', json={'descricao':'turma de java','id':64, "professor_id": 1, "ativo" : True})
         r_lista_before = requests.get('http://localhost:5000/turma/64')
         self.assertEqual(r_lista_before.json()['descricao'],'turma de java')
         
