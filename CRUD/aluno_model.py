@@ -49,3 +49,4 @@ def atualizar_aluno(id, novos_dados):
 def excluir_aluno(id):
     aluno = aluno_por_id(id)
     dados["alunos"].remove(aluno)
+    
