@@ -96,6 +96,7 @@ class TestStringMethods(unittest.TestCase):
              "media_final": 9.5})
         
         r_lista_depois = requests.get('http://localhost:5000/aluno/1')
+        print(r_lista_depois)
         self.assertEqual(r_lista_depois.json()['nome'],'Camila Teste')
         self.assertEqual(r_lista_depois.json()['id'],1)
         
@@ -104,8 +105,7 @@ class TestStringMethods(unittest.TestCase):
 #----------------------------------------------------------------------------
 
     def test_005_professor_retorna_lista(self):
-        r = requests.get('http://localhost:5000/professor')
-        
+        r = requests.get('http://localhost:5000/professor')    
         if r.status_code == 404:
             self.fail("O link está com erro/Não há professores no server")
         
