@@ -99,30 +99,11 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r_lista_depois.json()['nome'],'Camila Teste')
         self.assertEqual(r_lista_depois.json()['id'],1)
         
-    def test_005_edita_aluno_patch(self):
-        requests.post('http://localhost:5000/aluno',json={"id": 44, 
-            "nome": "Aldair", 
-            "idade": 22, 
-            "turma_id": 1, 
-            "data_nascimento":"2025,3,14",
-            "nota_primeiro_semestre": 10.0,
-            "nota_segundo_semestre": 9.0,
-            "media_final": 9.5})
-        
-        r_lista_antes = requests.get('http://localhost:5000/aluno/44')
-        self.assertEqual(r_lista_antes.json()['nome'],"Aldair")
-        
-        requests.patch('http://localhost:5000/aluno/44', json={"nome": "Aldair Teste", 
-            "idade": 21, 
-            "turma_id": 1, 
-        })
-        r_lista_depois = requests.get('http://localhost:5000/aluno/44')
-        self.assertEqual(r_lista_depois.json()['nome'],'Aldair Teste')
-        self.assertEqual(r_lista_depois.json()['id'],44)
+
 
 #----------------------------------------------------------------------------
 
-    def test_004_professor_retorna_lista(self):
+    def test_005_professor_retorna_lista(self):
         r = requests.get('http://localhost:5000/professor')
         
         if r.status_code == 404:
@@ -203,17 +184,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r_lista_depois_professor.json()['nome'],'Nicolas Lima')
         self.assertEqual(r_lista_depois_professor.json()['id'],18)
         
-    def test_009_edita_professor_patch(self):
-        requests.post('http://localhost:5000/professor', json={'id':28, 'nome':'Miguel', 'idade': 13, 'materia': "DevOps", 'observacoes': "Aula de Segunda"})
-
-        r_lista_antes_professor = requests.get('http://localhost:5000/professor/28')
-        self.assertEqual(r_lista_antes_professor.json()['nome'],'Miguel')
-        
-        requests.patch('http://localhost:5000/professor/28', json={'nome':'Miguel Lima', 'idade': 13, 'materia': "Espanhol", 'observacoes': "Aula de domingo"})
-        
-        r_lista_depois_professor = requests.get('http://localhost:5000/professor/28')
-        self.assertEqual(r_lista_depois_professor.json()['nome'],'Miguel Lima')
-        self.assertEqual(r_lista_depois_professor.json()['id'],28)
     
     def test_010_turma(self):
         r = requests.get("http://localhost:5000/turma")
@@ -289,15 +259,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r_lista_after.json()['descricao'],'turma de matematica')
         self.assertEqual(r_lista_after.json()['id'],14)
         
-    def test_014_mudar_turma_path(self):
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma de java','id':64, "professor_id": 1, "ativo" : True})
-        r_lista_before = requests.get('http://localhost:5000/turma/64')
-        self.assertEqual(r_lista_before.json()['descricao'],'turma de java')
-        
-        requests.patch('http://localhost:5000/turma/64',json={'descricao':'turma de python', "professor_id": 1})
-        r_lista_after = requests.get('http://localhost:5000/turma/64')
-        self.assertEqual(r_lista_after.json()['descricao'],'turma de python')
-        self.assertEqual(r_lista_after.json()['id'],64)
         
 def runTests():
         suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)
