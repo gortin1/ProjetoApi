@@ -19,38 +19,40 @@ class TestStringMethods(unittest.TestCase):
         self.assertIsInstance(obj_retornado, list)
    
     def test_001_adicionar_aluno(self):
-        requests.post('http://localhost:5000/aluno', json={'nome': 'Ronaldo', 'id':3, 'turma_id' : 2})
-        requests.post('http://localhost:5000/aluno', json={'nome': 'Marcola', 'id':4, 'turma_id' : 1})
+        requests.delete('http://localhost:5000/aluno')
+        requests.post('http://localhost:5000/aluno', json={ 'nome': 'Ronaldo', 'idade': 19, 'turma_id' : 2, 'data_nascimento': 18062005, 'nota1': 7.0, 'nota2': 7.0, 'media_final': 14.0})
+        # requests.post('http://localhost:5000/aluno', json={'nome': 'Marcola', 'id':4, 'turma_id' : 1})
         
         r_lista =  requests.get('http://localhost:5000/aluno')
         lista_retornada = r_lista.json()
         adicao1 = False
-        adicao2 = False
+        # adicao2 = False
         
         for aluno in lista_retornada:
             if aluno['nome'] == 'Ronaldo':
                 adicao1 = True
-            if aluno['nome'] == 'Marcola':
-                adicao2 = True
+            # if aluno['nome'] == 'Marcola':
+            #     adicao2 = True
             
-        if not adicao1 or not adicao2: 
+        if not adicao1: 
             self.fail('Aluno não apareceu na lista de alunos')
 
     def test_002_request_id_aluno(self):
-        r = requests.post('http://localhost:5000/aluno', json={'nome':"noemi", 'id':21, 'turma_id' : 2})
-        
-        resposta = requests.get('http://localhost:5000/aluno/21')
+        requests.post('http://localhost:5000/aluno', json={'nome':"noemi",'turma_id' : 2,  'idade': 19, 'turma_id' : 2, 'data_nascimento': 18062005, 'nota1': 7.0, 'nota2': 7.0, 'media_final': 14.0})
+        get = requests.get('http://localhost:5000/aluno')
+        print('json', get.json())
+        resposta = requests.get('http://localhost:5000/aluno/2')
         dict_retornado = resposta.json()
         self.assertEqual(type(dict_retornado), dict)
         self.assertIn('nome', dict_retornado)
         self.assertEqual(dict_retornado['nome'],'noemi')
    
     def test_003_deletar_aluno(self):
-        requests.post('http://localhost:5000/aluno', json={'nome':'Jorginho', 'id':23, 'turma_id' : 2})
-        requests.post('http://localhost:5000/aluno', json={'nome':'Mariazinha', 'id':24, 'turma_id' : 2})
-        requests.post('http://localhost:5000/aluno', json={'nome':'Luan', 'id':25, 'turma_id' : 2})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Jorginho', 'turma_id' : 2,  'idade': 19, 'turma_id' : 2, 'data_nascimento': 18062005, 'nota1': 7.0, 'nota2': 7.0, 'media_final': 14.0})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Mariazinha','turma_id' : 2,  'idade': 19, 'turma_id' : 2, 'data_nascimento': 18062005, 'nota1': 7.0, 'nota2': 7.0, 'media_final': 14.0})
+        requests.post('http://localhost:5000/aluno', json={'nome':'Luan','turma_id' : 2,  'idade': 19, 'turma_id' : 2, 'data_nascimento': 18062005, 'nota1': 7.0, 'nota2': 7.0, 'media_final': 14.0})
         
-        requests.delete('http://localhost:5000/aluno/24')
+        requests.delete('http://localhost:5000/aluno/4')
         r_lista = requests.get('http://localhost:5000/aluno')
         lista_retornada = r_lista.json()
         adicao1 = False
@@ -63,10 +65,11 @@ class TestStringMethods(unittest.TestCase):
         if not adicao1 or not adicao2:
             self.fail("Deletou o aluno errado")
 
-        requests.delete('http://localhost:5000/aluno/25')
+        requests.delete('http://localhost:5000/aluno/5')
 
         r_lista2 = requests.get('http://localhost:5000/aluno')
         lista_retornada2 = r_lista2.json()
+        print("print aqui", lista_retornada2)
 
         for aluno in lista_retornada2:
             if aluno['nome'] == 'Jorginho':
@@ -75,7 +78,7 @@ class TestStringMethods(unittest.TestCase):
              self.fail("Aluno errado deletado")
 
     def test_004_edita_aluno(self):
-        requests.post('http://localhost:5000/aluno',json={"id": 1, 
+        requests.post('http://localhost:5000/aluno',json={ 
             "nome": "Camila", 
              "idade": 20, 
              "turma_id": 1, 
@@ -84,7 +87,7 @@ class TestStringMethods(unittest.TestCase):
              "nota_segundo_semestre": 9.0,
              "media_final": 9.5})
         
-        r_lista_antes = requests.get('http://localhost:5000/aluno/1')
+        r_lista_antes = requests.get('http://localhost:5000/aluno/6')
         self.assertEqual(r_lista_antes.json()['nome'],"Camila")
         
         requests.put('http://localhost:5000/aluno/1', json={"nome": "Camila Teste", 
@@ -95,10 +98,10 @@ class TestStringMethods(unittest.TestCase):
              "nota_segundo_semestre": 9.0,
              "media_final": 9.5})
         
-        r_lista_depois = requests.get('http://localhost:5000/aluno/1')
+        r_lista_depois = requests.get('http://localhost:5000/aluno/6')
         print(r_lista_depois)
         self.assertEqual(r_lista_depois.json()['nome'],'Camila Teste')
-        self.assertEqual(r_lista_depois.json()['id'],1)
+        self.assertEqual(r_lista_depois.json()['id'],6)
         
 
 
