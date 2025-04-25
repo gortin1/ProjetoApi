@@ -1,52 +1,99 @@
 from datetime import date
+from config import db
 
-dados = {
-    "alunos": [
-        {
-            "id": 1, 
-            "nome": "Camila", 
-            "idade": 20, 
-            "turma_id": 1, 
-            "data_nascimento": date(2025,3,14),
-            "nota_primeiro_semestre": 10.0,
-            "nota_segundo_semestre": 9.0,
-            "media_final": 9.5
-        },
+class Aluno(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100))
+    idade = db.Column(db.Integer)
+    turma_id = db.Column(db.Integer)
+    data_nascimento = db.Column(db.Integer)
+    nota1 = db.Column(db.Float)
+    nota2 = db.Column(db.Float)
+    media_final = db.Column(db.Float)
 
-        {
-            "id": 2, 
-            "nome": "Fernando", 
-            "idade": 24, 
-            "turma_id": 2, 
-            "data_nascimento": date(2025,3,14),
-            "nota_primeiro_semestre": 10.0,
-            "nota_segundo_semestre": 8.0,
-            "media_final": 9.0
+    def __init__(self, nome, idade, turma_id, data_nascimento, nota1, nota2, media_final):
+        self.nome = nome
+        self.idade = idade
+        self.turma_id = turma_id
+        self.data_nascimento = data_nascimento
+        self.nota1 = nota1
+        self.nota2 = nota2
+        self.media_final = media_final
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nome': self.nome,
+            'idade': self.idade,
+            'turma_id': self.turma_id,
+            'data_nascimento': self.data_nascimento,
+            'nota1': self.nota1,
+            'nota2': self.nota2,
+            'media_final': self.media_final
         }
-    ]
-}
+# dados = {
+#     "alunos": [
+#         {
+#             "id": 1, 
+#             "nome": "Camila", 
+#             "idade": 20, 
+#             "turma_id": 1, 
+#             "data_nascimento": date(2025,3,14),
+#             "nota_primeiro_semestre": 10.0,
+#             "nota_segundo_semestre": 9.0,
+#             "media_final": 9.5
+#         },
+
+#         {
+#             "id": 2, 
+#             "nome": "Fernando", 
+#             "idade": 24, 
+#             "turma_id": 2, 
+#             "data_nascimento": date(2025,3,14),
+#             "nota_primeiro_semestre": 10.0,
+#             "nota_segundo_semestre": 8.0,
+#             "media_final": 9.0
+#         }
+#     ]
+# }
 
 class AlunoNaoEncontrado(Exception):
     pass
      
 def listar_alunos():
-    return dados["alunos"]
+    alunos = Aluno.query.all()
+    return [aluno.to_dict() for aluno in alunos]
 
 def aluno_por_id(id):
-    alunos = dados["alunos"]
-    for aluno in alunos:
-        if aluno["id"] == id:
-            return aluno
-    raise AlunoNaoEncontrado()
+    aluno = Aluno.query.get(id)
+    if not aluno:
+        raise AlunoNaoEncontrado
+    print(aluno.to_dict())
+    return aluno.to_dict()
         
 def adicionar_aluno(aluno):
-    dados["alunos"].append(aluno)
-
+    novo_aluno = Aluno(**aluno)
+    db.session.add(novo_aluno)
+    db.session.commit()
+        
 def atualizar_aluno(id, novos_dados):
-    aluno = aluno_por_id(id)
-    aluno.update(novos_dados)
+    aluno = Aluno.query.get(id)
+    if not aluno:
+        raise AlunoNaoEncontrado
+    for chave in novos_dados.keys():
+        aluno[chave] = novos_dados[chave]
+    db.session.commit()
                 
 def excluir_aluno(id):
-    aluno = aluno_por_id(id)
-    dados["alunos"].remove(aluno)
+    aluno = Aluno.query.get(id)
+    if not aluno:
+        raise AlunoNaoEncontrado
+    db.session.delete(aluno)
+    db.session.commit()
+    
+def excluir_tudo():
+    aluno = Aluno.query.all()
+    if not aluno:
+        raise AlunoNaoEncontrado
+    db.session.delete(aluno)
     

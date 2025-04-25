@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from aluno.aluno_model import AlunoNaoEncontrado, listar_alunos, aluno_por_id, adicionar_aluno, atualizar_aluno, excluir_aluno
+from aluno.aluno_model import AlunoNaoEncontrado, listar_alunos, aluno_por_id, adicionar_aluno, atualizar_aluno, excluir_aluno, excluir_tudo
 
 alunos_blueprint = Blueprint('alunos', __name__)
 
@@ -37,6 +37,14 @@ def atualiza_aluno(id):
 def deletar_aluno(id):
     try:
         excluir_aluno(id)
+        return '', 204 
+    except AlunoNaoEncontrado:
+        return jsonify({'message':'Aluno não encontrado'}, 404)
+    
+@alunos_blueprint.route('/aluno', methods=['DELETE'])
+def deletar_todos():
+    try:
+        excluir_tudo()
         return '', 204 
     except AlunoNaoEncontrado:
         return jsonify({'message':'Aluno não encontrado'}, 404)
