@@ -1,49 +1,50 @@
 from flask import Blueprint, jsonify, request
-from .alunos_model import alunoNaoEncontrado, aluno_por_id, adicionar_aluno,atualizar_aluno,listar_aluno,excluir_aluno
+from aluno.aluno_model import AlunoNaoEncontrado, listar_alunos, aluno_por_id, adicionar_aluno, atualizar_aluno, excluir_aluno, excluir_tudo
 
-alunos_blueprint =  Blueprint('aluno', __name__)
+alunos_blueprint = Blueprint('alunos', __name__)
 
-@alunos_blueprint.route('/aluno', methods=['GET'])
-def getalunos():
-    return jsonify(listar_aluno())
+@alunos_blueprint.route('/aluno', methods = ['GET'])
+def alunos():
+    return jsonify(listar_alunos())
 
-@alunos_blueprint.route('/aluno/<int:id_aluno>', methods=['GET'])
-def getAlunos(id_aluno):
+@alunos_blueprint.route('/aluno/<int:id>', methods = ['GET'])
+def alunos_por_id(id):
     try:
-        aluno = aluno_por_id(id_aluno)
+        aluno = aluno_por_id(id)
         return jsonify(aluno)
-    except alunoNaoEncontrado:
-        return jsonify({'message':'Aluno não encontrado'}),404
+    except AlunoNaoEncontrado:
+        return jsonify({'message':'Aluno não encontrado'}, 404)
+        
 
-@alunos_blueprint.route('/aluno', methods=['POST'])
-def create_aluno():
-    data = request.json
-    adicionar_aluno(data)
-    return jsonify(data),201
+@alunos_blueprint.route('/aluno', methods = ['POST'])
+def criar_aluno():
+    dados = request.json
+    adicionar_aluno(dados)
+    return jsonify(dados), 200 
 
-@alunos_blueprint.route('/aluno/<int:id_aluno>', methods=['PUT'])
-def update_aluno(id_aluno):
-    data = request.json
+
+@alunos_blueprint.route('/aluno/<int:id>', methods=['PUT'])
+def atualiza_aluno(id):
+    dados = request.json
+    try:
+        atualizar_aluno(id, dados)
+        return jsonify(aluno_por_id(id))
+    except AlunoNaoEncontrado:
+        return jsonify({'message':'Aluno não encontrado'}, 404)
+        
+
+@alunos_blueprint.route('/aluno/<int:id>', methods=['DELETE'])
+def deletar_aluno(id):
+    try:
+        excluir_aluno(id)
+        return '', 204 
+    except AlunoNaoEncontrado:
+        return jsonify({'message':'Aluno não encontrado'}, 404)
     
+@alunos_blueprint.route('/aluno', methods=['DELETE'])
+def deletar_todos():
     try:
-        atualizar_aluno(id_aluno,data)
-        return jsonify(aluno_por_id(id_aluno))
-    except alunoNaoEncontrado:
-        return jsonify({'message': 'Aluno não encontrado'}),404
-
-@alunos_blueprint.route('/aluno/<int:id_aluno>', methods=['DELETE'])
-def delete_aluno(id_aluno):
-    try:
-        excluir_aluno(id_aluno)
-        return '', 204
-    except alunoNaoEncontrado:
-        return jsonify({'message': 'Aluno Não Encontrado'}),404
-    
-@alunos_blueprint.route('/aluno/<int:id_aluno>', methods=['PATCH'])
-def patch_aluno(id_aluno):
-    data = request.json
-    try:
-        atualizar_aluno(id_aluno,data)
-        return jsonify(aluno_por_id(id_aluno))
-    except alunoNaoEncontrado:
-        return jsonify({'message': 'Aluno não encontrado'}),404
+        excluir_tudo()
+        return '', 204 
+    except AlunoNaoEncontrado:
+        return jsonify({'message':'Aluno não encontrado'}, 404)
