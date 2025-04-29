@@ -1,39 +1,298 @@
 import requests
 import unittest
-from datetime import date
+from datetime import date, datetime
+from config import db
+
+import aluno.aluno_model as aluno
+import professor.professor_model as professor
+import turma.turma_model as turma
 
 
 class TestStringMethods(unittest.TestCase):
-    
-    def test_000_alunos_retorna_lista(self):
-        r = requests.get('http://localhost:5000/aluno')
+
+    def test_001_adiciona_professor(self):
+        requests.post('http://localhost:5000/professor', json= {
+            'nome' : 'Gabriel', 
+            'idade': 20, 
+            'materia': 'Portugues', 
+            'observacoes': 'Aula de Segunda'
+        })
+
+        requests.post('http://localhost:5000/professor', json= {
+            'nome' : 'Marcella', 
+            'idade': 18, 
+            'materia': 'API', 
+            'observacoes': 'Aula de Quarta'
+        })
         
-        if r.status_code == 404:
-            self.fail("O link está com erro/Não há alunos no server")
+        professores =  requests.get('http://localhost:5000/professor')
+        lista_retornada = professores.json()
+
+        adicao1 = False
+        adicao2 = False
+        
+        for professor in lista_retornada:
+            if professor['nome'] == 'Gabriel':
+                adicao1 = True
+            if professor['nome'] == 'Marcella':
+                adicao2 = True
+            
+        if not adicao1 or not adicao2: 
+            self.fail('Professor não foi adicionado.')
+
+
+    def test_002_lista_de_professores(self):
+        professores = requests.get('http://localhost:5000/professor')
+        
+        if professores.status_code == 404:
+            self.fail("O link está com erro | Não há professores no server")
         
         try:
-            obj_retornado = r.json()
+            obj_retornado = professores.json()
         except:
             self.fail("Não foi retornado um json")
             
         self.assertIsInstance(obj_retornado, list)
+<<<<<<< HEAD
    
     def test_001_adicionar_aluno(self):
         requests.delete('http://localhost:5000/aluno')
         requests.post('http://localhost:5000/aluno', json={ 'nome': 'Ronaldo', 'idade': 19, 'turma_id' : 2, 'data_nascimento': 18062005, 'nota1': 7.0, 'nota2': 7.0, 'media_final': 14.0})
         # requests.post('http://localhost:5000/aluno', json={'nome': 'Marcola', 'id':4, 'turma_id' : 1})
+=======
+
+
+    def test_003_professor_por_id(self):
+        requests.post('http://localhost:5000/professor', json= {
+            'nome' : 'Carol', 
+            'idade': 35, 
+            'materia': 'Historia', 
+            'observacoes': 'Aula de Sexta'
+        })
+
+        professor_id = requests.get('http://localhost:5000/professor/3')
+        dict_retornado = professor_id.json()
+        self.assertEqual(type(dict_retornado), dict)
+        self.assertIn('nome', dict_retornado)
+        self.assertEqual(dict_retornado['nome'],'Carol')
+
+
+    def test_004_edita_professor(self):
+        requests.post('http://localhost:5000/professor', json= {
+            'nome' : 'Nicolas', 
+            'idade': 41, 
+            'materia': 'Geografia', 
+            'observacoes': 'Aula de Quinta'
+        })
+
+        professor_id_antes = requests.get('http://localhost:5000/professor/4')
+        self.assertEqual(professor_id_antes.json()['nome'],'Nicolas')
+>>>>>>> b539fc8f01d5657d876f10005467c94b4c3f46c3
         
-        r_lista =  requests.get('http://localhost:5000/aluno')
-        lista_retornada = r_lista.json()
+        requests.put('http://localhost:5000/professor/4', json= {
+            'nome' : 'Nicolas Lima', 
+            'idade': 41, 
+            'materia': 'DevOps', 
+            'observacoes': 'Aula de Quinta'
+        })
+        
+        professor_id_depois = requests.get('http://localhost:5000/professor/4')
+        self.assertEqual(professor_id_depois.json()['nome'], 'Nicolas Lima')
+        self.assertEqual(professor_id_depois.json()['id'], 4)
+
+   
+    def test_005_deleta_professor(self):
+        requests.post('http://localhost:5000/professor', json= {
+            'nome' : 'Carlos', 
+            'idade': 26, 
+            'materia': 'Filosofia', 
+            'observacoes': 'Aula de Segunda'
+        })
+
+        requests.post('http://localhost:5000/professor', json= {
+            'nome' : 'Caio', 
+            'idade': 29, 
+            'materia': 'Mobile', 
+            'observacoes': 'Aula de Terça'
+        })
+
+        requests.post('http://localhost:5000/professor', json= {
+            'nome' : 'Geovane', 
+            'idade': 27, 
+            'materia': 'Matematica', 
+            'observacoes': 'Aula de Sexta'
+        })
+        
+        requests.delete('http://localhost:5000/professor/5')
+
+        professores = requests.get('http://localhost:5000/professor')
+        lista_retornada = professores.json()
+        
+        self.assertNotIn('Carlos', [professor['nome'] for professor in lista_retornada])
+
+        requests.delete('http://localhost:5000/professor/7')
+
+        professores2 = requests.get('http://localhost:5000/professor')
+        lista_retornada2 = professores2.json()
+
+        self.assertNotIn('Geovane', [professor['nome'] for professor in lista_retornada2])
+        
+#----------------------------------------------------------------------------
+
+    def test_006_adiciona_turma(self):
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Turma 1', 
+            'professor_id' : 1,
+            'ativo' : True
+        })
+
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Turma 2', 
+            'professor_id' : 1,
+            'ativo' : True
+        })
+
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Turma 3', 
+            'professor_id' : 1,
+            'ativo' : False
+        })
+
+        turmas = requests.get("http://localhost:5000/turma")
+        lista_retornada = turmas.json()
+
+        Turma1 = False
+        Turma2 = False
+        Turma3 = False
+
+        for turma in lista_retornada:
+            if turma['descricao'] == "Turma 1":
+                Turma1 = True
+            if turma['descricao'] == "Turma 2":
+                Turma2 = True
+            if turma['descricao'] == "Turma 3":
+                Turma3 = True
+
+        if not Turma1 or not Turma2 or not Turma3:
+            self.fail("Turma não foi adicionada.")
+
+
+    def test_007_lista_de_turmas(self):
+        turmas = requests.get("http://localhost:5000/turma")
+        
+        if turmas.status_code == 404:
+            self.fail("Link não está funcionando/Não ha turmas")
+            
+        try:
+            obj_retornado = turmas.json()
+        except:
+            self.fail("Objeto não é um json")
+            
+        self.assertIsInstance(obj_retornado, list)
+        
+            
+    def test_008_turma_por_id(self):
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Turma Id', 
+            'professor_id' : 1,
+            'ativo' : True
+        })
+        
+        turma_id = requests.get('http://localhost:5000/turma/4')
+        dict_retornado = turma_id.json()
+        self.assertEqual(type(dict_retornado), dict)
+        self.assertIn('descricao', dict_retornado)
+        self.assertEqual(dict_retornado['descricao'],'Turma Id')
+        
+    
+              
+    def test_009_edita_turma(self):
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Portugues', 
+            'professor_id' : 2,
+            'ativo' : True
+        })
+        
+        turma_id_antes = requests.get('http://localhost:5000/turma/5')
+        self.assertEqual(turma_id_antes.json()['descricao'],'Portugues')
+        
+        requests.put("http://localhost:5000/turma/5", json={
+            'descricao' : 'Matematica', 
+            'professor_id' : 2,
+            'ativo' : True
+        })
+
+        turma_id_depois = requests.get('http://localhost:5000/turma/5')
+        self.assertEqual(turma_id_depois.json()['descricao'],'Matematica')
+        self.assertEqual(turma_id_depois.json()['id'], 5)
+
+
+    def test_010_deleta_turma(self):
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Analise e Desenvolvimento de Sistemas', 
+            'professor_id' : 1,
+            'ativo' : True
+        })
+
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Ciencia da Computacao', 
+            'professor_id' : 2,
+            'ativo' : True
+        })
+
+        requests.post("http://localhost:5000/turma", json={
+            'descricao' : 'Sistemas de Informação', 
+            'professor_id' : 1,
+            'ativo' : False
+        })
+
+        requests.delete('http://localhost:5000/turma/6')
+        
+        turmas = requests.get('http://localhost:5000/turma')
+        lista_retornada = turmas.json()
+       
+        self.assertNotIn('Analise e Desenvolvimento de Sistemas', [turma['descricao'] for turma in lista_retornada])
+            
+        requests.delete('http://localhost:5000/turma/8')
+        
+        turmas2 = requests.get('http://localhost:5000/turma')
+        lista_retornada2 = turmas2.json()
+
+        self.assertNotIn('Sistemas de Informação', [turma['descricao'] for turma in lista_retornada2])
+
+#----------------------------------------------------------------------------
+
+    def test_011_adiciona_aluno(self):
+        requests.post('http://localhost:5000/aluno', json={
+            'nome': 'Ronaldo', 
+            'idade' : 20,
+            'turma_id' : 2,
+            'data_nascimento' : '2005-10-15',
+            'nota_primeiro_semestre' : 8.0,
+            'nota_segundo_semestre' : 9.0
+        })
+
+        requests.post('http://localhost:5000/aluno', json={
+            'nome': 'Marcola', 
+            'idade' : 25,
+            'turma_id' : 1,
+            'data_nascimento' : '2003-10-15',
+            'nota_primeiro_semestre' : 7.0,
+            'nota_segundo_semestre' : 5.0
+        })
+        
+        alunos =  requests.get('http://localhost:5000/aluno')
+        lista_alunos = alunos.json()
         adicao1 = False
         # adicao2 = False
         
-        for aluno in lista_retornada:
+        for aluno in lista_alunos:
             if aluno['nome'] == 'Ronaldo':
                 adicao1 = True
             # if aluno['nome'] == 'Marcola':
             #     adicao2 = True
             
+<<<<<<< HEAD
         if not adicao1: 
             self.fail('Aluno não apareceu na lista de alunos')
 
@@ -111,158 +370,103 @@ class TestStringMethods(unittest.TestCase):
         r = requests.get('http://localhost:5000/professor')    
         if r.status_code == 404:
             self.fail("O link está com erro/Não há professores no server")
+=======
+        if not adicao1 or not adicao2: 
+            self.fail('Aluno não foi adicionado.')
+
+ 
+    def test_012_lista_de_alunos(self):
+        alunos = requests.get('http://localhost:5000/aluno')
+        
+        if alunos.status_code == 404:
+            self.fail("O link está com erro | Não há alunos no server")
+>>>>>>> b539fc8f01d5657d876f10005467c94b4c3f46c3
         
         try:
-            obj_retornado = r.json()
+            obj_retornado = alunos.json()
         except:
             self.fail("Não foi retornado um json")
             
         self.assertIsInstance(obj_retornado, list)
-   
-    def test_006_adicionar_professor(self):
-        requests.post('http://localhost:5000/professor', json= {"id": 1, "nome": "Gabriel", "idade": 20, "materia": "Portugues", "observacoes": "Aula de Segunda"})
-        requests.post('http://localhost:5000/professor', json= {"id": 2, "nome": "Marcella", "idade": 18, "materia": "Api", "observacoes": "Aula de quarta"})
-        
-        r_lista =  requests.get('http://localhost:5000/professor')
-        lista_retornada = r_lista.json()
-        adicao1 = False
-        adicao2 = False
-        
-        for aluno in lista_retornada:
-            if aluno['nome'] == 'Gabriel':
-                adicao1 = True
-            if aluno['nome'] == 'Marcella':
-                adicao2 = True
-            
-        if not adicao1 or not adicao2: 
-                self.fail('Professores não apareceu na lista')
 
-    def test_007_request_id_professor(self):
-        requests.post('http://localhost:5000/professor', json= {"id": 5, "nome": "Carol", "idade": 17, "materia": "Historia", "observacoes": "Aula de Sexta"})
-        
-        resposta = requests.get('http://localhost:5000/professor/5')
-        dict_retornado = resposta.json()
+
+    def test_013_aluno_por_id(self):
+        aluno_id = requests.get('http://localhost:5000/aluno/1')
+        dict_retornado = aluno_id.json()
         self.assertEqual(type(dict_retornado), dict)
         self.assertIn('nome', dict_retornado)
-        self.assertEqual(dict_retornado['nome'],'Carol')
-   
-    def test_008_deletar_professor(self):
-        requests.post('http://localhost:5000/professor', json={'id':50, 'nome':'Carlos', 'idade': 22, 'materia': "Geografia", 'observacoes': "Aula de recuperação"})
-        requests.post('http://localhost:5000/professor', json={'id':51, 'nome':'Caio', 'idade': 25, 'materia': "Mobile", 'observacoes': "Aula de Quarta"})
-        requests.post('http://localhost:5000/professor', json={'id':53, 'nome':'Geovane', 'idade': 27, 'materia': "Matematica", 'observacoes': "Aula de Quinta"})
-        
-        requests.delete('http://localhost:5000/professor/51')
-        r_lista = requests.get('http://localhost:5000/professor')
-        lista_retornada = r_lista.json()
-        adicao1 = False
-        adicao2 = False
-        for aluno in lista_retornada:
-            if aluno['nome'] == 'Carlos':
-                adicao1 = True
-            if aluno['nome'] == 'Geovane':
-                adicao2 = True
-        if not adicao1 or not adicao2:
-            self.fail("Deletou o professor errado")
+        self.assertEqual(dict_retornado['nome'], 'Ronaldo')
 
-        requests.delete('http://localhost:5000/professor/50')
 
-        r_lista2 = requests.get('http://localhost:5000/professor')
-        lista_retornada2 = r_lista2.json()
+    def test_014_edita_aluno(self):
+        requests.post('http://localhost:5000/aluno', json={ 
+            'nome': 'Camila', 
+            'idade' : 20,
+            'turma_id' : 1,
+            'data_nascimento' : '2005-02-06',
+            'nota_primeiro_semestre' : 10.0,
+            'nota_segundo_semestre' : 9.0
+        })
+        
+        aluno_id_antes = requests.get('http://localhost:5000/aluno/3')
+        self.assertEqual(aluno_id_antes.json()['nome'], "Camila")
 
-        for aluno in lista_retornada2:
-            if aluno['nome'] == 'Geovane':
-                pass
-        if aluno['nome'] != 'Geovane':
-             self.fail("Professor errado deletado")
+        requests.put('http://localhost:5000/aluno/3', json={ 
+            'nome': 'Camila Ribeiro', 
+            'idade' : 22,
+            'turma_id' : 2,
+            'data_nascimento' : '2005-03-06',
+            'nota_primeiro_semestre' : 10.0,
+            'nota_segundo_semestre' : 8.0
+        })
+        
+        aluno_id_depois = requests.get('http://localhost:5000/aluno/3')
+        self.assertEqual(aluno_id_depois.json()['nome'],'Camila Ribeiro')
+        self.assertEqual(aluno_id_depois.json()['id'], 3)
+        
+    def test_015_deleta_aluno(self):
+        requests.post('http://localhost:5000/aluno', json={ 
+            'nome': 'Jorginho', 
+            'idade' : 22,
+            'turma_id' : 2,
+            'data_nascimento' : '2005-03-06',
+            'nota_primeiro_semestre' : 5.0,
+            'nota_segundo_semestre' : 9.0
+        })
 
-    def test_009_edita_professor(self):
-        requests.post('http://localhost:5000/professor', json={'id':18, 'nome':'Nicolas', 'idade': 19, 'materia': "Matematica", 'observacoes': "Aula de Quinta"})
+        requests.post('http://localhost:5000/aluno', json={ 
+            'nome': 'Mariazinha', 
+            'idade' : 22,
+            'turma_id' : 2,
+            'data_nascimento' : '2005-03-06',
+            'nota_primeiro_semestre' : 6.0,
+            'nota_segundo_semestre' : 7.0
+        })
 
-        r_lista_antes_professor = requests.get('http://localhost:5000/professor/18')
-        self.assertEqual(r_lista_antes_professor.json()['nome'],'Nicolas')
+        requests.post('http://localhost:5000/aluno', json={ 
+            'nome': 'Luan', 
+            'idade' : 22,
+            'turma_id' : 2,
+            'data_nascimento' : '2005-03-06',
+            'nota_primeiro_semestre' : 7.0,
+            'nota_segundo_semestre' : 10.0
+        })
         
-        requests.put('http://localhost:5000/professor/18', json={'nome':'Nicolas Lima', 'idade': 19, 'materia': "full stack", 'observacoes': "Aula de Quinta"})
-        
-        r_lista_depois_professor = requests.get('http://localhost:5000/professor/18')
-        self.assertEqual(r_lista_depois_professor.json()['nome'],'Nicolas Lima')
-        self.assertEqual(r_lista_depois_professor.json()['id'],18)
-        
-    
-    def test_010_turma(self):
-        r = requests.get("http://localhost:5000/turma")
-        
-        if r.status_code == 404:
-            self.fail("Link não está funcionando/Não ha turmas")
-            
-        try:
-            obj_retornado = r.json()
-        except:
-            self.fail("Objeto não é um json")
-            
-        self.assertIsInstance(obj_retornado, list)
-        
-    def test_011_adicionar_turma(self):
-        r= requests.post("http://localhost:5000/turma", json={'descricao':'Turma 1', 'id':3, "professor_id": 1})
-        r_lista = requests.get("http://localhost:5000/turma")
-        retornada = r_lista.json()
-        Turma = False
-        for turmas in retornada:
-            if turmas['descricao'] == "Turma 1":
-                Turma = True
-        if not Turma:
-            self.fail("A turma não foi adicionada corretamente")
-            
-    def test_012_turma_id(self):
-        r = requests.post("http://localhost:5000/turma", json={'descricao':'turma 2','id': 4, "professor_id": 1})
-        
-        resposta = requests.get('http://localhost:5000/turma/4')
-        dict_retornado = resposta.json()
-        self.assertEqual(type(dict_retornado), dict)
-        self.assertIn('descricao', dict_retornado)
-        self.assertEqual(dict_retornado['descricao'],'turma 2')
-        
-    def test_013_remover_turma(self):
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma Ads', 'id':10, "professor_id": 1})
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma bd', 'id':11, "professor_id": 1})
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma ci', 'id':12, "professor_id": 1})
-        
-        requests.delete('http://localhost:5000/turma/10')
-        
-        r_lista = requests.get('http://localhost:5000/turma')
-        lista_retornada = r_lista.json()
-        validate1 = False
-        validate2 = False
-        validate3 = False
-        
-        for turma in lista_retornada:
-            if turma['descricao'] == 'turma bd':
-                validate1 = True
-            if turma['descricao'] == 'turma ci':
-                validate2 = True
-        if not validate1 or not validate2:
-            self.fail("Deletou a turma errada")
-            
-        requests.delete('http://localhost:5000/turma/11')
-        
-        r_lista2 = requests.get('http://localhost:5000/turma')
-        lista_retornada2 = r_lista2.json()
-        for turma in lista_retornada2:
-            if turma['descricao'] == 'turma ci':
-                validate3 = True
-        if not validate3:
-            self.fail('Deletou a turma errada')
-              
-    def test_014_mudar_turma(self):
-        requests.post('http://localhost:5000/turma', json={'descricao':'turma de portugues','id':14, "professor_id": 1, "ativo" : True})
-        r_lista_before = requests.get('http://localhost:5000/turma/14')
-        self.assertEqual(r_lista_before.json()['descricao'],'turma de portugues')
-        
-        requests.put('http://localhost:5000/turma/14',json={'descricao':'turma de matematica', "professor_id": 1,"ativo" : True})
-        r_lista_after = requests.get('http://localhost:5000/turma/14')
-        self.assertEqual(r_lista_after.json()['descricao'],'turma de matematica')
-        self.assertEqual(r_lista_after.json()['id'],14)
-        
-        
+        requests.delete('http://localhost:5000/aluno/4')
+
+        alunos = requests.get('http://localhost:5000/aluno')
+        lista_retornada = alunos.json()
+
+        self.assertNotIn('Jorginho', [aluno['nome'] for aluno in lista_retornada])
+
+        requests.delete('http://localhost:5000/aluno/6')
+
+        alunos2 = requests.get('http://localhost:5000/aluno')
+        lista_retornada2 = alunos2.json()
+
+        self.assertNotIn('Luan', [aluno['nome'] for aluno in lista_retornada2])
+
+       
 def runTests():
         suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)
         unittest.TextTestRunner(verbosity=2,failfast=True).run(suite)

@@ -38,6 +38,10 @@ def deleteProfessor(id):
         excluir_professor(id)
         return "", 204
     except ProfessorNaoEncontrado:
+<<<<<<< HEAD
         return jsonify({'Erro': f'Ocorreu um erro: Professor não foi Deletado'}, 404)
 
         
+=======
+        return jsonify({'Erro': f'Ocorreu um erro: Professor não foi Deletado'}, 404)
+>>>>>>> b539fc8f01d5657d876f10005467c94b4c3f46c3
