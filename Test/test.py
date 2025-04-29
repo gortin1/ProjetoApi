@@ -46,7 +46,7 @@ class TestStringMethods(unittest.TestCase):
         
         if professores.status_code == 404:
             self.fail("O link está com erro | Não há professores no server")
-        
+            
         try:
             obj_retornado = professores.json()
         except:

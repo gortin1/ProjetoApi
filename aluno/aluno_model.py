@@ -52,10 +52,8 @@ class Aluno(db.Model):
             "media_final" : self.media_final
         }
 
-
 class AlunoNaoEncontrado(Exception):
     pass
-     
 
 def listar_alunos():
     alunos = Aluno.query.all()
