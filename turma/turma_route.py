@@ -4,11 +4,11 @@ from turma.turma_model import turma_por_id, TurmaNaoEncontrada, listar_turmas, e
 turmas_blueprint = Blueprint("turma", __name__)
 
 
-@turmas_blueprint.route('/turma', methods = ['GET'])
+@turmas_blueprint.route('/turmas', methods = ['GET'])
 def getTurmas():
     return jsonify(listar_turmas())
 
-@turmas_blueprint.route('/turma/<int:id>', methods = ['GET'])
+@turmas_blueprint.route('/turmas/<int:id>', methods = ['GET'])
 def getTurma(id):
     try:
         turma = turma_por_id(id)
@@ -17,13 +17,13 @@ def getTurma(id):
             return jsonify({'Erro': f'Ocorreu um erro: Turma não encontrado'}, 404)
             
         
-@turmas_blueprint.route('/turma', methods = ['POST'])
+@turmas_blueprint.route('/turmas', methods = ['POST'])
 def createTurma():
         dados = request.json
         adicionar_turma(dados)
         return jsonify(dados)
         
-@turmas_blueprint.route('/turma/<int:id>', methods = ['PUT'])
+@turmas_blueprint.route('/turmas/<int:id>', methods = ['PUT'])
 def updateTurma(id):
         dados = request.json
         try: 
@@ -32,7 +32,7 @@ def updateTurma(id):
         except TurmaNaoEncontrada:
             return jsonify({'Erro': f'Ocorreu um erro: Turma não foi atualizado'}, 404)
                 
-@turmas_blueprint.route('/turma/<int:id>', methods=['DELETE'])
+@turmas_blueprint.route('/turmas/<int:id>', methods=['DELETE'])
 def deleteTurma(id):
     try:
         excluir_turma(id)
