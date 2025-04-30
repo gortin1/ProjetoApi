@@ -7,4 +7,4 @@ api = Api(
     doc="/docs",
     mask_swagger= False,
     prefix="/api"
-)
+)v
