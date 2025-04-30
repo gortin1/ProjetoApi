@@ -9,33 +9,35 @@ def getTurmas():
     return jsonify(listar_turmas())
 
 @turmas_blueprint.route('/turmas/<int:id>', methods = ['GET'])
-def getTurma(id):
+def get_turma(id):
     try:
         turma = turma_por_id(id)
         return jsonify(turma)
     except TurmaNaoEncontrada:
-            return jsonify({'Erro': f'Ocorreu um erro: Turma não encontrado'}, 404)
+        return jsonify({'erro': 'Turma não encontrada'}), 404
             
         
 @turmas_blueprint.route('/turmas', methods = ['POST'])
-def createTurma():
-        dados = request.json
-        adicionar_turma(dados)
-        return jsonify(dados)
+def create_turma():
+    dados = request.json
+    adicionar_turma(dados)
+    return jsonify(dados), 201
         
+
 @turmas_blueprint.route('/turmas/<int:id>', methods = ['PUT'])
-def updateTurma(id):
-        dados = request.json
-        try: 
-            atualizar_turma(id, dados)
-            return jsonify(turma_por_id(id))
-        except TurmaNaoEncontrada:
-            return jsonify({'Erro': f'Ocorreu um erro: Turma não foi atualizado'}, 404)
+def update_turma(id):
+    dados = request.json
+    try: 
+        atualizar_turma(id, dados)
+        return jsonify(turma_por_id(id))
+    except TurmaNaoEncontrada:
+        return jsonify({'erro': 'Turma não encontrada'}), 404
+
                 
 @turmas_blueprint.route('/turmas/<int:id>', methods=['DELETE'])
-def deleteTurma(id):
+def delete_turma(id):
     try:
         excluir_turma(id)
         return "", 204
     except TurmaNaoEncontrada:
-        return jsonify({'Erro': 'Ocorreu um erro: Turma não foi Deletado'}), 404
+        return jsonify({'erro': 'Turma não encontrada'}), 404
