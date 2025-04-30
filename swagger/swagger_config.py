@@ -5,4 +5,6 @@ from swagger.namespaces.turma_namespace import turma_ns
 
 def configure_swagger(app):
     api.init_app(app)
-    api.add_namespace(aluno_ns, path="/aluno")
+    api.add_namespace(aluno_ns, path="/alunos")
+    api.add_namespace(professor_ns, path="/professores")
+    api.add_namespace(turma_ns, path="/turmas")

@@ -24,7 +24,7 @@ professor_output_model = professor_ns.model("ProfessorOutput", {
 class professorsResource(Resource):
     @professor_ns.marshal_list_with(professor_output_model)
     def get(self):
-        """Lista todos os professors"""
+        """Lista todos os professores"""
         return listar_professores()
 
     @professor_ns.expect(professor_model)

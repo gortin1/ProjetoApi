@@ -1,11 +1,5 @@
 import requests
 import unittest
-from datetime import date, datetime
-from config import db
-
-import aluno.aluno_model as aluno
-import professor.professor_model as professor
-import turma.turma_model as turma
 
 
 class TestStringMethods(unittest.TestCase):
