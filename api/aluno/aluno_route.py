@@ -3,7 +3,7 @@ from aluno.aluno_model import AlunoNaoEncontrado, listar_alunos, aluno_por_id, a
 
 alunos_blueprint = Blueprint('alunos', __name__)
 
-@alunos_blueprint.route('/alunos', methods = ['GET'])
+@alunos_blueprint.route('/alunos/', methods = ['GET'])
 def get_alunos():
     return jsonify(listar_alunos())
     
@@ -15,7 +15,7 @@ def get_aluno(id):
     except AlunoNaoEncontrado:
         return jsonify({'erro':'Aluno não encontrado'}), 404
         
-@alunos_blueprint.route('/alunos', methods = ['POST'])
+@alunos_blueprint.route('/alunos/', methods = ['POST'])
 def create_aluno():
     dados = request.json
     adicionar_aluno(dados)

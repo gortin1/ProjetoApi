@@ -55,7 +55,7 @@ def adicionar_turma(novos_dados):
 
     db.session.add(nova_turma)
     db.session.commit()
-    return {"message" : "Turma adicionada com sucesso!"}, 201
+    return {"message" : "Turma adicionada com sucesso!"}, 200
 
 def atualizar_turma(id, novos_dados):
     turma = Turma.query.get(id)

@@ -3,7 +3,7 @@ from turma.turma_model import turma_por_id, TurmaNaoEncontrada, listar_turmas, e
 
 turmas_blueprint = Blueprint("turma", __name__)
 
-@turmas_blueprint.route('/turmas', methods = ['GET'])
+@turmas_blueprint.route('/turmas/', methods = ['GET'])
 def get_turmas():
     return jsonify(listar_turmas())
 
@@ -15,7 +15,7 @@ def get_turma(id):
     except TurmaNaoEncontrada:
         return jsonify({'erro': 'Turma não encontrada'}), 404
                
-@turmas_blueprint.route('/turmas', methods = ['POST'])
+@turmas_blueprint.route('/turmas/', methods = ['POST'])
 def create_turma():
     dados = request.json
     adicionar_turma(dados)

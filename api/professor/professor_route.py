@@ -3,7 +3,7 @@ from professor.professor_model import professor_por_id, ProfessorNaoEncontrado, 
 
 professores_blueprint = Blueprint("professor", __name__)
 
-@professores_blueprint.route('/professores', methods = ['GET'])
+@professores_blueprint.route('/professores/', methods = ['GET'])
 def get_professores():
     return jsonify(listar_professores())
 
@@ -15,7 +15,7 @@ def get_professor(id):
     except ProfessorNaoEncontrado:
         return jsonify({'erro': 'Professor não encontrado'}), 404
            
-@professores_blueprint.route('/professores', methods = ['POST'])
+@professores_blueprint.route('/professores/', methods = ['POST'])
 def create_professor():
     dados = request.json
     adicionar_professor(dados)

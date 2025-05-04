@@ -58,7 +58,7 @@ def adicionar_professor(novos_dados):
 
     db.session.add(novo_professor)
     db.session.commit()
-    return {"message" : "Professor adicionado com sucesso!"}, 201
+    return {"message" : "Professor adicionado com sucesso!"}, 200
 
 def atualizar_professor(id, novos_dados):
     professor = Professor.query.get(id)
