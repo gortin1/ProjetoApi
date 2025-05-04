@@ -8,10 +8,10 @@ app.register_blueprint(alunos_blueprint, url_prefix='/api')
 app.register_blueprint(professores_blueprint, url_prefix='/api')
 app.register_blueprint(turmas_blueprint, url_prefix='/api')
 
+configure_swagger(app)
+
 with app.app_context():
     db.create_all()
-
-configure_swagger(app)
 
 if __name__ == '__main__':
     app.run(host=app.config["HOST"], port=app.config['PORT'], debug=app.config['DEBUG'])

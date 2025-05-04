@@ -49,4 +49,4 @@ class ProfessorIdResource(Resource):
     def delete(self, id_professor):
         """Exclui um professor pelo ID"""
         excluir_professor(id_professor)
-        return {"message": "Professor excluído com sucesso"}, 200
+        return {"message": "Professor excluído com sucesso."}, 200

@@ -5,35 +5,42 @@ professores_blueprint = Blueprint("professor", __name__)
 
 @professores_blueprint.route('/professores/', methods = ['GET'])
 def get_professores():
-    return jsonify(listar_professores())
+    return jsonify(listar_professores()), 200
 
 @professores_blueprint.route('/professores/<int:id>', methods = ['GET'])
 def get_professor(id):
     try:
         professor = professor_por_id(id)
-        return jsonify(professor)
+        return jsonify(professor), 200
     except ProfessorNaoEncontrado:
-        return jsonify({'erro': 'Professor não encontrado'}), 404
+        return jsonify({'erro': 'Professor não encontrado.'}), 404
            
 @professores_blueprint.route('/professores/', methods = ['POST'])
 def create_professor():
-    dados = request.json
-    adicionar_professor(dados)
-    return jsonify(dados), 201
+    try:
+        dados = request.json
+        response, status_code = adicionar_professor(dados)
+        return jsonify(response), status_code
+    except Exception as e:
+        return jsonify({'erro': 'Erro interno no servidor.'}), 500
    
 @professores_blueprint.route('/professores/<int:id>', methods = ['PUT'])
 def update_professor(id):
     dados = request.json
     try: 
         atualizar_professor(id, dados)
-        return jsonify(professor_por_id(id))
+        professor_atualizado = professor_por_id(id)
+        return jsonify({
+            'message': 'Professor atualizado com sucesso.',
+            'professor': professor_atualizado
+        }), 200
     except ProfessorNaoEncontrado:
-        return jsonify({'erro': 'Professor não encontrado'}), 404
+        return jsonify({'erro': 'Professor não encontrado.'}), 404
                 
 @professores_blueprint.route('/professores/<int:id>', methods=['DELETE'])
 def delete_professor(id):
     try:
         excluir_professor(id)
-        return "", 204
+        return jsonify({'message': 'Professor excluído com sucesso.'}), 200
     except ProfessorNaoEncontrado:
-        return jsonify({'erro': 'Professor não encontrado'}), 404
+        return jsonify({'erro': 'Professor não encontrado.'}), 404

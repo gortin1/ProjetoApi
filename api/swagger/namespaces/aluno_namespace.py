@@ -53,4 +53,4 @@ class AlunoIdResource(Resource):
     def delete(self, id_aluno):
         """Exclui um aluno pelo ID"""
         excluir_aluno(id_aluno)
-        return {'message': "Aluno excluído com sucesso"}, 200
+        return {'message': 'Aluno excluído com sucesso.'}, 200

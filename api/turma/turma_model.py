@@ -36,7 +36,6 @@ class TurmaNaoEncontrada(Exception):
 
 def listar_turmas():
     turmas = Turma.query.all()
-    print(turmas)
     return [turma.to_dict() for turma in turmas]
 
 def turma_por_id(id):
@@ -47,6 +46,10 @@ def turma_por_id(id):
     return turma.to_dict()
         
 def adicionar_turma(novos_dados):
+    professor = Professor.query.get(novos_dados['professor_id'])
+    if professor is None:
+        return {'erro': 'Professor não existe.'}, 404
+
     nova_turma = Turma(
         descricao = novos_dados['descricao'],
         professor_id = int(novos_dados['professor_id']),
@@ -55,7 +58,7 @@ def adicionar_turma(novos_dados):
 
     db.session.add(nova_turma)
     db.session.commit()
-    return {"message" : "Turma adicionada com sucesso!"}, 200
+    return {'message': 'Turma adicionada com sucesso.'}, 201
 
 def atualizar_turma(id, novos_dados):
     turma = Turma.query.get(id)
@@ -67,7 +70,7 @@ def atualizar_turma(id, novos_dados):
     turma.ativo = novos_dados['ativo']
     
     db.session.commit()
-    return {"message": "Turma atualizada com sucesso!"}, 200
+    return {'message': 'Turma atualizada com sucesso.'}, 200
                 
 def excluir_turma(id):
     turma = Turma.query.get(id)
@@ -76,4 +79,4 @@ def excluir_turma(id):
 
     db.session.delete(turma)
     db.session.commit()
-    return {"message": "Turma excluída com sucesso!"}, 200
+    return {'message': 'Turma excluída com sucesso.'}, 200

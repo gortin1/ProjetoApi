@@ -48,4 +48,4 @@ class TurmaIdResource(Resource):
     def delete(self, id_turma):
         """Exclui uma turma pelo ID"""
         excluir_turma(id_turma)
-        return {"message": "Turma excluída com sucesso"}, 200
+        return {"message": "Turma excluída com sucesso."}, 200

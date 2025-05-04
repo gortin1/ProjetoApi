@@ -57,7 +57,6 @@ class AlunoNaoEncontrado(Exception):
 
 def listar_alunos():
     alunos = Aluno.query.all()
-    print(alunos)
     return [aluno.to_dict() for aluno in alunos]
 
 def aluno_por_id(id):
@@ -69,21 +68,21 @@ def aluno_por_id(id):
         
 def adicionar_aluno(novos_dados):
     turma = Turma.query.get(novos_dados['turma_id'])
-    if (turma is None):
-        return {"message" : "Turma não existe"}, 404
+    if turma is None:
+        return {'erro': 'Turma não existe.'}, 404
 
     novo_aluno = Aluno(
         nome = novos_dados['nome'],
         data_nascimento = datetime.strptime(novos_dados['data_nascimento'], "%Y-%m-%d").date(),
         turma_id = int(novos_dados['turma_id']),
         nota_primeiro_semestre = float(novos_dados['nota_primeiro_semestre']),
-        nota_segundo_semestre = float(novos_dados['nota_segundo_semestre']),
+        nota_segundo_semestre = float(novos_dados['nota_segundo_semestre'])       
     )
 
     db.session.add(novo_aluno)
     db.session.commit()
-    return {"message": "Aluno adicionado com sucesso!"}, 200
-
+    return {'message': 'Aluno adicionado com sucesso.'}, 201
+ 
 def atualizar_aluno(id, novos_dados):
     aluno = Aluno.query.get(id)
     if not aluno:
@@ -92,7 +91,7 @@ def atualizar_aluno(id, novos_dados):
     try:
         data_nascimento = datetime.strptime(novos_dados['data_nascimento'], "%Y-%m-%d").date()
     except ValueError:
-        return {"message": "Formato de data inválido. Use YYYY-MM-DD."}, 400
+        return {'erro': 'Formato de data inválido. Use YYYY-MM-DD.'}, 400
     
     aluno.nome = novos_dados['nome']
     aluno.turma_id = novos_dados['turma_id']
@@ -103,7 +102,7 @@ def atualizar_aluno(id, novos_dados):
     aluno.idade = aluno.calcularIdade()
     
     db.session.commit()
-    return {"message": "Aluno atualizado com sucesso!"}, 200
+    return {'message': 'Aluno atualizado com sucesso.'}, 200
 
 def excluir_aluno(id):
     aluno = Aluno.query.get(id)
@@ -112,4 +111,4 @@ def excluir_aluno(id):
 
     db.session.delete(aluno)
     db.session.commit()
-    return {"message": "Aluno excluído com sucesso!"}, 200
+    return {'message': 'Aluno excluído com sucesso.'}, 200
