@@ -7,7 +7,6 @@ alunos_blueprint = Blueprint('alunos', __name__)
 def get_alunos():
     return jsonify(listar_alunos())
     
-
 @alunos_blueprint.route('/alunos/<int:id>', methods = ['GET'])
 def get_aluno(id):
     try:
@@ -16,13 +15,11 @@ def get_aluno(id):
     except AlunoNaoEncontrado:
         return jsonify({'erro':'Aluno não encontrado'}), 404
         
-
 @alunos_blueprint.route('/alunos', methods = ['POST'])
 def create_aluno():
     dados = request.json
     adicionar_aluno(dados)
     return jsonify(dados), 201 
-
 
 @alunos_blueprint.route('/alunos/<int:id>', methods=['PUT'])
 def update_aluno(id):
@@ -33,7 +30,6 @@ def update_aluno(id):
     except AlunoNaoEncontrado:
         return jsonify({'erro':'Aluno não encontrado'}), 404
         
-
 @alunos_blueprint.route('/alunos/<int:id>', methods=['DELETE'])
 def delete_aluno(id):
     try:

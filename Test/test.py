@@ -4,9 +4,8 @@ from datetime import date, datetime
 from config import db
 
 import aluno.aluno_model as aluno
-import professor.professor_model as professor
 import turma.turma_model as turma
-
+import professor.professor_model as professor
 
 class TestStringMethods(unittest.TestCase):
 
@@ -40,7 +39,6 @@ class TestStringMethods(unittest.TestCase):
         if not adicao1 or not adicao2: 
             self.fail('Professor não foi adicionado.')
 
-
     def test_002_lista_de_professores(self):
         professores = requests.get('http://localhost:5000/professores')
         
@@ -53,7 +51,6 @@ class TestStringMethods(unittest.TestCase):
             self.fail("Não foi retornado um json")
             
         self.assertIsInstance(obj_retornado, list)
-
 
     def test_003_professor_por_id(self):
         requests.post('http://localhost:5000/professores', json= {
@@ -68,7 +65,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(type(dict_retornado), dict)
         self.assertIn('nome', dict_retornado)
         self.assertEqual(dict_retornado['nome'],'Carol')
-
 
     def test_004_edita_professor(self):
         requests.post('http://localhost:5000/professores', json= {
@@ -92,7 +88,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(professor_id_depois.json()['nome'], 'Nicolas Lima')
         self.assertEqual(professor_id_depois.json()['id'], 4)
 
-   
     def test_005_deleta_professor(self):
         requests.post('http://localhost:5000/professores', json= {
             'nome' : 'Carlos', 
@@ -128,8 +123,6 @@ class TestStringMethods(unittest.TestCase):
         lista_retornada2 = professores2.json()
 
         self.assertNotIn('Geovane', [professor['nome'] for professor in lista_retornada2])
-        
-#----------------------------------------------------------------------------
 
     def test_006_adiciona_turma(self):
         requests.post("http://localhost:5000/turmas", json={
@@ -168,7 +161,6 @@ class TestStringMethods(unittest.TestCase):
         if not Turma1 or not Turma2 or not Turma3:
             self.fail("Turma não foi adicionada.")
 
-
     def test_007_lista_de_turmas(self):
         turmas = requests.get("http://localhost:5000/turmas")
         
@@ -181,8 +173,7 @@ class TestStringMethods(unittest.TestCase):
             self.fail("Objeto não é um json")
             
         self.assertIsInstance(obj_retornado, list)
-        
-            
+          
     def test_008_turma_por_id(self):
         requests.post("http://localhost:5000/turmas", json={
             'descricao' : 'Turma Id', 
@@ -195,9 +186,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(type(dict_retornado), dict)
         self.assertIn('descricao', dict_retornado)
         self.assertEqual(dict_retornado['descricao'],'Turma Id')
-        
-    
-              
+                
     def test_009_edita_turma(self):
         requests.post("http://localhost:5000/turmas", json={
             'descricao' : 'Portugues', 
@@ -217,7 +206,6 @@ class TestStringMethods(unittest.TestCase):
         turma_id_depois = requests.get('http://localhost:5000/turmas/5')
         self.assertEqual(turma_id_depois.json()['descricao'],'Matematica')
         self.assertEqual(turma_id_depois.json()['id'], 5)
-
 
     def test_010_deleta_turma(self):
         requests.post("http://localhost:5000/turmas", json={
@@ -252,8 +240,6 @@ class TestStringMethods(unittest.TestCase):
 
         self.assertNotIn('Sistemas de Informação', [turma['descricao'] for turma in lista_retornada2])
 
-#----------------------------------------------------------------------------
-
     def test_011_adiciona_aluno(self):
         requests.post('http://localhost:5000/alunos', json={
             'nome': 'Ronaldo', 
@@ -287,7 +273,6 @@ class TestStringMethods(unittest.TestCase):
         if not adicao1 or not adicao2: 
             self.fail('Aluno não foi adicionado.')
 
- 
     def test_012_lista_de_alunos(self):
         alunos = requests.get('http://localhost:5000/alunos')
         
@@ -308,7 +293,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(type(dict_retornado), dict)
         self.assertIn('nome', dict_retornado)
         self.assertEqual(dict_retornado['nome'], 'Ronaldo')
-
 
     def test_014_edita_aluno(self):
         requests.post('http://localhost:5000/alunos', json={ 
@@ -377,7 +361,6 @@ class TestStringMethods(unittest.TestCase):
         lista_retornada2 = alunos2.json()
 
         self.assertNotIn('Luan', [aluno['nome'] for aluno in lista_retornada2])
-
        
 def runTests():
         suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)

@@ -35,13 +35,11 @@ class Professor(db.Model):
 
 class ProfessorNaoEncontrado(Exception):
     pass
-     
 
 def listar_professores():
     professores = Professor.query.all()
     print(professores)
     return [professor.to_dict() for professor in professores]
-
 
 def professor_por_id(id):
     professor = Professor.query.get(id)
@@ -49,7 +47,6 @@ def professor_por_id(id):
     if not professor:
         raise ProfessorNaoEncontrado(f"Professor não encontrado.")
     return professor.to_dict()
-
 
 def adicionar_professor(novos_dados):
     novo_professor = Professor(
@@ -63,7 +60,6 @@ def adicionar_professor(novos_dados):
     db.session.commit()
     return {"message" : "Professor adicionado com sucesso!"}, 201
 
-
 def atualizar_professor(id, novos_dados):
     professor = Professor.query.get(id)
     if not professor:
@@ -76,8 +72,7 @@ def atualizar_professor(id, novos_dados):
     
     db.session.commit()
     return {"message": "Professor atualizado com sucesso!"}, 200
-
-               
+    
 def excluir_professor(id):
     professor = Professor.query.get(id)
     if not professor:

@@ -39,7 +39,6 @@ def listar_turmas():
     print(turmas)
     return [turma.to_dict() for turma in turmas]
 
-
 def turma_por_id(id):
     turma = Turma.query.get(id)
 
@@ -47,7 +46,6 @@ def turma_por_id(id):
         raise TurmaNaoEncontrada(f"Turma não encontrada.")
     return turma.to_dict()
         
-
 def adicionar_turma(novos_dados):
     nova_turma = Turma(
         descricao = novos_dados['descricao'],
@@ -58,7 +56,6 @@ def adicionar_turma(novos_dados):
     db.session.add(nova_turma)
     db.session.commit()
     return {"message" : "Turma adicionada com sucesso!"}, 201
-
 
 def atualizar_turma(id, novos_dados):
     turma = Turma.query.get(id)
@@ -72,7 +69,6 @@ def atualizar_turma(id, novos_dados):
     db.session.commit()
     return {"message": "Turma atualizada com sucesso!"}, 200
                 
-
 def excluir_turma(id):
     turma = Turma.query.get(id)
     if not turma:

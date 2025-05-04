@@ -1,5 +1,5 @@
-from datetime import date, datetime
 from config import db
+from datetime import date, datetime
 from turma.turma_model import Turma
 
 class Aluno(db.Model):
@@ -60,7 +60,6 @@ def listar_alunos():
     print(alunos)
     return [aluno.to_dict() for aluno in alunos]
 
-
 def aluno_por_id(id):
     aluno = Aluno.query.get(id)
 
@@ -68,7 +67,6 @@ def aluno_por_id(id):
         raise AlunoNaoEncontrado(f"Aluno não encontrado.")
     return aluno.to_dict()
         
-
 def adicionar_aluno(novos_dados):
     turma = Turma.query.get(novos_dados['turma_id'])
     if (turma is None):
@@ -86,7 +84,6 @@ def adicionar_aluno(novos_dados):
     db.session.commit()
     return {"message": "Aluno adicionado com sucesso!"}, 200
 
-    
 def atualizar_aluno(id, novos_dados):
     aluno = Aluno.query.get(id)
     if not aluno:
@@ -107,7 +104,6 @@ def atualizar_aluno(id, novos_dados):
     
     db.session.commit()
     return {"message": "Aluno atualizado com sucesso!"}, 200
-
 
 def excluir_aluno(id):
     aluno = Aluno.query.get(id)

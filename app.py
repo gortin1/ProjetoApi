@@ -1,4 +1,3 @@
-import os
 from config import app, db
 from aluno.aluno_route import alunos_blueprint
 from professor.professor_route import professores_blueprint
