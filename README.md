@@ -1,10 +1,10 @@
-# 📚 API de gestão escolar
+# 📚 API de Gestão Escolar
 
-Este repositório contém a **API de gestão escolar**, desenvolvida com **Flask** e **SQLAlchemy**, como parte de uma arquitetura baseada em **microsserviços**.
+Este repositório contém a **API de Gestão Escolar**, desenvolvida com **Flask** e **SQLAlchemy**, como parte de uma arquitetura baseada em **microsserviços**.
 
 ## 🧩 Arquitetura
 
-A API de Atividade de Salas é um **microsserviço** na qual é responsável pelo gerenciamento de alunos, professores e turmas. Esta API também possui duas outras APIs que são dependentes dela, sendo elas: [Atividade de sala](https://github.com/gortin1/atividade-salas) e [Reserva de sala](https://github.com/gortin1/reserva-salas)
+A API de Gestão Escolar é um **microsserviço** na qual é responsável pelo gerenciamento de alunos, professores e turmas. Esta API também possui duas outras APIs que são dependentes desta API, sendo elas: [Atividade de sala](https://github.com/gortin1/atividade-salas) e [Reserva de sala](https://github.com/gortin1/reserva-salas)
 
 ---
 
