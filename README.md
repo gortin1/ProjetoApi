@@ -14,14 +14,14 @@ A API de Atividade de Salas é um **microsserviço** na qual é responsável pel
 - Flask
 - SQLAlchemy
 - SQLite (como banco de dados local)
-- Requests (para consumo da API externa)
+- Requests (Para os testes unitários)
 - Unittest (para testes unitários da API)
 
 ---
 
 ## 🐳 Como Executar as APIs com Docker
 
-Este guia mostra como executar a api em Docker.
+Este guia mostra como executar a API em Docker.
 
 
 ### 1º Passo - Construa a imagem api-gestão-escolar da [api de gestão](https://github.com/gortin1/ProjetoApi.git) 
@@ -43,7 +43,7 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 ### Alunos
 - `GET / alunos` – Lista todos os alunos
 - `POST / alunos` – Cria um novo aluno
-- `GET / alunos/<id>` – Mostra os dados de um aluno especifico
+- `GET / alunos/<id>` – Mostra os dados de um aluno específico
 - `PUT / alunos/<id>` – Atualiza um aluno (é necessário preencher todos os campos para atualizar o aluno)
 - `DELETE / alunos/<id>` – Remove um aluno
 
@@ -77,7 +77,7 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 ### Professores
 - `GET / professores` – Lista todos os professores
 - `POST / professores` – Cria um novo professor
-- `GET / professores/<id>` – Mostra os dados de um professor especifico
+- `GET / professores/<id>` – Mostra os dados de um professor específico
 - `PUT / professores/<id>` – Atualiza um professor (é necessário preencher todos os campos para atualizar o professor)
 - `DELETE / professores/<id>` – Remove um professor
 
@@ -106,7 +106,7 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 ### Turmas
 - `GET / turmas` – Lista todas as turmas
 - `POST / turmas` – Cria uma nova turma
-- `GET / turmas/<id>` – Mostra os dados de uma turma em especifico
+- `GET / turmas/<id>` – Mostra os dados de uma turma em específico
 - `PUT / turmas/<id>` – Atualiza uma turma (é necessário preencher todos os campos para atualizar a turma)
 - `DELETE / turmas/<id>` – Remove uma turma
 
