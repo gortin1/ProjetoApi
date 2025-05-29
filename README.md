@@ -6,7 +6,6 @@ Este repositório contém a **API de Gestão Escolar**, desenvolvida com **Flask
 
 A API de Gestão Escolar é um **microsserviço** na qual é responsável pelo gerenciamento de alunos, professores e turmas.
 
-
 ---
 
 ## 🚀 Tecnologias Utilizadas
@@ -24,10 +23,20 @@ A API de Gestão Escolar é um **microsserviço** na qual é responsável pelo g
 
 Este guia mostra como executar a API em Docker.
 
+## 📥 Clonando o Repositório
+
+O ProjetoApi é responsável pelo gerenciamento de alunos, professores e turmas. Para executar corretamente, você deve clonar o repositório:
+
+```
+git clone https://github.com/seu-usuario/ProjetoApi.git
+```
+
+---
 
 ### 1º Passo - Construa a imagem api-gestão-escolar da [api de gestão](https://github.com/gortin1/ProjetoApi.git) 
 
 ``` bash
+cd ProjetoApi
 docker build -t api-gestao-escolar .
 ``` 
 
@@ -37,9 +46,14 @@ docker build -t api-gestao-escolar .
 docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 ```
 
-#### Pronto! Você já pode utilizar a api tranquilamente!
+#### Pronto! Você já pode utilizar a API tranquilamente!
 
-⚠️ Aviso: A API de Reservas estará acessível em: [http://localhost:5000/swagger](http://localhost:5000/swagger).
+⚠️ Aviso: A API de Reservas estará acessível em:
+
+* [http://localhost:5000/swagger](http://localhost:5000/swagger)
+* [http://localhost:5000/api/alunos/](http://localhost:5000/api/alunos/)
+* [http://localhost:5000/api/professores/](http://localhost:5000/api/professores/)
+* [http://localhost:5000/api/turmas/](http://localhost:5000/api/turmas/)
 
 ---
 
@@ -64,21 +78,6 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 }
 ```
 
-### Exemplo de estrutura de dados do corpo JSON em GET(alunos) :
-
-```json
-{
-  "id": 0,
-  "nome": "string",
-  "idade": 0,
-  "data_nascimento": "string",
-  "nota_primeiro_semestre": 0,
-  "nota_segundo_semestre": 0,
-  "media_final": 0,
-  "turma_id": 0
-}
-```
-
 ### Professores
 - `GET / professores` – Lista todos os professores
 - `POST / professores` – Cria um novo professor
@@ -90,17 +89,6 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 
 ```json
 {
-  "nome": "string",
-  "idade": 0,
-  "materia": "string",
-  "observacoes": "string"
-}
-```
-### Exemplo de estrutura de dados do corpo JSON em GET(professores) :
-
-```json
-{
-   "id": 0,
   "nome": "string",
   "idade": 0,
   "materia": "string",
@@ -119,16 +107,6 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 
 ```json
 {
-   "descricao": "string",
-  "ativo": true,
-  "professor_id": 0
-}
-```
-### Exemplo de estrutura de dados do corpo JSON em GET(turmas) :
-
-```json
-{
-  "id": 0,
   "descricao": "string",
   "ativo": true,
   "professor_id": 0
@@ -142,25 +120,20 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 ```
 api/
 ├── aluno/
-│   ├── __init__.py
 │   ├── aluno_model.py
 │   └── aluno_route.py
 ├── professor/
-│   ├── __init__.py
 │   ├── professor_model.py
 │   └── professor_route.py
 ├── swagger/
 │   └── swagger_config.py
 ├── namespaces/
-│   ├── __init__.py
 │   ├── aluno_namespace.py
 │   ├── professor_namespace.py
 │   └── turma_namespace.py
 ├── test/
-│   ├── __init__.py
 │   └── test.py
 ├── turma/
-│   ├── __init__.py
 │   ├── turma_model.py
 │   └── turma_route.py
 ├── app.py
