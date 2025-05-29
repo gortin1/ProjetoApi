@@ -4,7 +4,7 @@ Este repositório contém a **API de gestão escolar**, desenvolvida com **Flask
 
 ## 🧩 Arquitetura
 
-A API de Atividade de Salas é um **microsserviço** na qual é responsável exclusivamente pelo gerenciamento das atividades de um professor. Esta api tambem tem duas outras APIs na qual são dependente dela sendo elas [Atividade de sala](https://github.com/gortin1/atividade-salas) e [Reserva de sala](https://github.com/gortin1/reserva-salas)
+A API de Atividade de Salas é um **microsserviço** na qual é responsável pelo gerenciamento de alunos, professores e turmas. Esta API também possui duas outras APIs que são dependentes dela, sendo elas: [Atividade de sala](https://github.com/gortin1/atividade-salas) e [Reserva de sala](https://github.com/gortin1/reserva-salas)
 
 ---
 
