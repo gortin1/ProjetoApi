@@ -4,7 +4,8 @@ Este repositório contém a **API de Gestão Escolar**, desenvolvida com **Flask
 
 ## 🧩 Arquitetura
 
-A API de Gestão Escolar é um **microsserviço** na qual é responsável pelo gerenciamento de alunos, professores e turmas. Esta API também possui duas outras APIs que são dependentes desta API, sendo elas: [Atividade de sala](https://github.com/gortin1/atividade-salas) e [Reserva de sala](https://github.com/gortin1/reserva-salas)
+A API de Gestão Escolar é um **microsserviço** na qual é responsável pelo gerenciamento de alunos, professores e turmas.
+
 
 ---
 
