@@ -39,6 +39,10 @@ docker run -d -p 5000:5000 --name api-gestao-escolar api-gestao-escolar
 
 #### Pronto! Você já pode utilizar a api tranquilamente!
 
+⚠️ Aviso: A API de Reservas estará acessível em: [http://localhost:5000/swagger](http://localhost:5000/swagger).
+
+---
+
 ## 📡 Endpoints Principais
 
 ### Alunos
